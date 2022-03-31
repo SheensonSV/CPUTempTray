@@ -6,6 +6,7 @@ Shows CPU Temperature in Celsius
 
 This is a program that show a CPU temperature being as boll with number at tray.
 Now it works only on MAC OS X.
+To exit - just click right button of mouse on tray's icon.
 It gets a param from systemctl as Integer. Then it goes to find png image file from resources and pull it into the tray.
 Very simple realisation.
 The minimum showing temperature is 1 grad Celsius and the max is 99.
