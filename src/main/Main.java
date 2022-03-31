@@ -2,12 +2,10 @@ package main;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Random;
 
 public class Main {
     private static Runtime runtime = Runtime.getRuntime();
@@ -31,6 +29,7 @@ public class Main {
 
                 if (lastTemperature != currentTemperature) {
                     String source = "src/resources/" + currentTemperature + ".png";
+
                     systemTray.remove(trayIcon);
 
                     Image icon = ImageIO.read(new File(source));
