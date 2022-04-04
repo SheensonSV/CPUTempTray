@@ -5,9 +5,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.*;
-import java.util.Arrays;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class Main {
     private static Runtime runtime = Runtime.getRuntime();
