@@ -34,7 +34,6 @@ public class Main {
                 currentTemperature = getTemperature();
                 if (currentTemperature < 1) currentTemperature = 1;
                 if (currentTemperature > 99) currentTemperature = 99;
-                System.out.println(getTemperature() + " C");
                 if (lastTemperature != currentTemperature) {
                     String source = "/resources/" + currentTemperature + ".png";
 
