@@ -17,6 +17,9 @@ But temperature data is not so precise.
 
 The minimum showing temperature is 1 grad Celsius and the max is 99.
 
+In that iteration you CAN NOT to run this code from IDE. Only after getting artefact. It used System Console().
+It doesn't get nullpointerexception only if it runs through "java -jar cputemptray.jar".
+
 ### Prerequisites
 
 You don't need to install any another tools. 

@@ -5,7 +5,9 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Main {
     private static Runtime runtime = Runtime.getRuntime();
@@ -14,9 +16,14 @@ public class Main {
     private static String s = null;
     private static final String findingLine = "CPU die temperature: ";
     private static Integer temperatureCPU = 0;
-    private static final byte[] password = System.getenv("SUDOPSWD").concat("\n\r").getBytes(StandardCharsets.UTF_8);
+    private static byte[] password;
 
     public static void main(String[] args) {
+        Console console = System.console();
+
+        char[] passwordInChart = console.readPassword("Enter sudo password: ");
+        password = getBytesFromCharsAndAddReturnSymbol(passwordInChart);
+
         if (!System.getProperties().getProperty("os.name").equals("Mac OS X")) {
             System.exit(0);
         }
@@ -29,13 +36,13 @@ public class Main {
                 currentTemperature = getTemperature();
                 if (currentTemperature < 1) currentTemperature = 1;
                 if (currentTemperature > 99) currentTemperature = 99;
-
+                System.out.println(getTemperature() + " C");
                 if (lastTemperature != currentTemperature) {
-                    String source = "src/resources/" + currentTemperature + ".png";
+                    String source = "/resources/" + currentTemperature + ".png";
 
                     systemTray.remove(trayIcon);
 
-                    Image icon = ImageIO.read(new File(source));
+                    Image icon = ImageIO.read(Objects.requireNonNull(Main.class.getResource(source)));
                     trayIcon = new TrayIcon(icon, "CPUTemp");
                     trayIcon.addMouseListener(new MouseListener() {
                         @Override
@@ -68,14 +75,13 @@ public class Main {
 
     public static Integer getTemperature() {
         BufferedReader stdInput = null;
-//        BufferedReader stdError = null;
+        BufferedReader stdError = null;
         OutputStream outputStream = null;
         try {
             process = runtime.exec(commands);
             stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-            //need to use sudo permission
             outputStream = process.getOutputStream();
+            //need to use sudo permission that we get from Console.getPassword()
             outputStream.write(password);
             outputStream.flush();
 
@@ -88,13 +94,12 @@ public class Main {
             }
 
             //lets be there. may be it helps.
-//            stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-//            while ((s = stdError.readLine()) != null) {
-//                System.out.println(s);
-//            }
-
+            stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            while ((s = stdError.readLine()) != null) {
+                System.out.println(s);
+            }
             stdInput.close();
-//            stdError.close();
+            stdError.close();
             outputStream.close();
             return temperatureCPU;
         } catch (IOException e) {
@@ -103,12 +108,22 @@ public class Main {
         finally {
             try {
                 stdInput.close();
-//                stdError.close();
+                stdError.close();
                 outputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         return 0;
+    }
+
+    private static byte[] getBytesFromCharsAndAddReturnSymbol(char[] chars) {
+        int length = chars.length + 1;
+        byte[] bytes = new byte[length];
+        for (int i = 0; i < length - 1; i++) {
+            bytes[i] = (byte) chars[i];
+        }
+        bytes[length - 1] = '\r';
+        return bytes;
     }
 }

@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="CPUTempTray:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/CPUTempTray_jar</output-path>
+    <root id="root">
+      <element id="archive" name="CPUTempTray.jar">
+        <element id="module-output" name="CPUTempTray" />
+      </element>
+    </root>
+  </artifact>
+</component>
